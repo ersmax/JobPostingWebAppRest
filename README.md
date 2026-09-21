@@ -56,7 +56,7 @@ That is, we need to create a new API endpoint that:
 4. Path variables are defined with curly braces in the URL pattern: {postId}
 5. The @PathVariable annotation connects the URL variable to a method parameter
 
-## Add a specific job
+## Add a specific job posting
 The @RequestBody annotation is crucial for receiving data in REST APIs:
 - It converts JSON data from the request body into a Java object.
 - Spring automatically maps JSON fields to matching properties in JobPost class.
@@ -64,6 +64,25 @@ The @RequestBody annotation is crucial for receiving data in REST APIs:
 - Data comes in as the exact object type we need. 
 - @PostMapping("/jobPost") creates an endpoint that accepts POST requests
 - @RequestBody JobPost jobPost converts the incoming JSON to a JobPost object 
+
+## Update or delete a job posting
+- When we want to update an existing job post, we use the HTTP PUT method.
+- We send the complete updated job information to the server with
+  the annotation @RequestBody on the parameter and @PutMapping on the URL request
+  inside the Controller
+- @RequestBody JobPost jobPost converts the **incoming JSON to a JobPost object**
+- The server finds the matching job by ID and updates all its fields 
+- The updated job is returned as confirmation
+
+With delete, we proceed this way:
+- When we want to remove a job post completely, we use the HTTP DELETE method.
+- We specify which job to delete using its ID in the URL path 
+  with the annotation @DeleteMapping("/jobPost/{postId}")
+- Then Spring Boot will transform such String postId into appropriate parameter
+  with the annotation @PathVariable("postId") int id
+-  The @PathVariable annotation connects **the URL variable to a method parameter**
+- The server removes that job from the list
+- A confirmation message is returned
 
 
 
