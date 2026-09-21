@@ -4,10 +4,10 @@ A small job board where companies can **publish, browse, edit and delete job pos
 The backend is a REST API built with **Spring Boot**; the frontend is a **React** single-page app.
 The whole app is packaged in **one Docker image** and deployed on **Render**.
 
-**Live demo:** https://<your-app>.onrender.com
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://jobpostingwebapprest.onrender.com/)
 > Free hosting: the first request after ~15 min of inactivity can take up to a minute while the server wakes up.
 
-![Job Portal screenshot](docs/screenshot.png)
+![Job Portal images](src/main/resources/img/rest.gif)
 
 ---
 
