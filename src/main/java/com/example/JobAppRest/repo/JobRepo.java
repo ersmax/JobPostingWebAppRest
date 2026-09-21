@@ -40,6 +40,11 @@ public class JobRepo {
     }
 
     public void addJob(JobPost job) {
+        int nextId = jobs.stream()
+                        .mapToInt(JobPost::getPostId)
+                        .max()
+                        .orElse(0) + 1;
+        job.setPostId(nextId);
         jobs.add(job);
     }
 

@@ -1,4 +1,4 @@
-This web application allows companies to post new job listings, as well as update, delete or 
+@This web application allows companies to post new job listings, as well as update, delete or 
 see all job postings.
 
 The front end is built with React.js, while the backend is developed with Spring Boot.
@@ -7,6 +7,7 @@ The communication method is RESTful API.
 The dependencies for the backend needed are:
 - Lombok: https://mvnrepository.com/artifact/org.projectlombok/lombok
 - Spring-boot-starter-webmvc: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webmvc
+- Jackson to convert POJO to XML data file: https://mvnrepository.com/artifact/tools.jackson.dataformat/jackson-dataformat-xml
 
 To run the front-end:
 1. Run the React app: Open a new terminal and type: npm install
@@ -84,6 +85,7 @@ With delete, we proceed this way:
 - The server removes that job from the list
 - A confirmation message is returned
 
+## Convert POJO to XML data file
 
 
 

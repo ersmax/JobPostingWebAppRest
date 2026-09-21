@@ -15,7 +15,7 @@ public class JobRestController {
     @Autowired
     private JobService jobService;
 
-    @GetMapping("/jobPosts")
+    @GetMapping(path = "/jobPosts", produces = {"application/json"})
     public List<JobPost> viewJobs() {
         return jobService.getAllJobs();
     }
@@ -25,7 +25,7 @@ public class JobRestController {
         return jobService.getJob(id);
     }
 
-    @PostMapping("/jobPost")
+    @PostMapping(path = "/jobPost", consumes = {"application/json"})
     public JobPost addJob(@RequestBody JobPost jobPost) {
         jobService.addJob(jobPost);
         return jobService.getJob(jobPost.getPostId());
