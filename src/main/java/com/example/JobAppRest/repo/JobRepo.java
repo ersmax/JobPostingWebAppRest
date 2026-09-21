@@ -31,6 +31,14 @@ public class JobRepo {
         return jobs;
     }
 
+    public JobPost getJob(int postId) {
+        for (JobPost job : jobs) {
+            if (job.getPostId() == postId)
+                return job;
+        }
+        return null;
+    }
+
     public void addJob(JobPost job) {
         jobs.add(job);
     }
