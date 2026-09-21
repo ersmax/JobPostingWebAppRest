@@ -15,13 +15,31 @@ public class JobRestController {
     @Autowired
     private JobService jobService;
 
-    @GetMapping("jobPosts")
+    @GetMapping("/jobPosts")
     public List<JobPost> viewJobs() {
         return jobService.getAllJobs();
     }
 
-    @GetMapping("jobPost/{postId}")
+    @GetMapping("/jobPost/{postId}")
     public JobPost getJob(@PathVariable("postId") int id) {
         return jobService.getJob(id);
+    }
+
+    @PostMapping("/jobPost")
+    public JobPost addJob(@RequestBody JobPost jobPost) {
+        jobService.addJob(jobPost);
+        return jobService.getJob(jobPost.getPostId());
+    }
+
+    @PutMapping("/jobPost")
+    public JobPost updateJob(@RequestBody JobPost jobPost) {
+        jobService.updateJob(jobPost);
+        return jobService.getJob(jobPost.getPostId());
+    }
+
+    @DeleteMapping("/jobPost/{postId}")
+    public String deleteJob(@PathVariable("postId") int id) {
+        jobService.deleteJob(id);
+        return "Deleted";
     }
 }

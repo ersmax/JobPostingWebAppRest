@@ -1,8 +1,12 @@
-This web application allows companies to post new job listings and allow jobseekers to
-apply to new jobs.
+This web application allows companies to post new job listings, as well as update, delete or 
+see all job postings.
 
 The front end is built with React.js, while the backend is developed with Spring Boot.
 The communication method is RESTful API.
+
+The dependencies for the backend needed are:
+- Lombok: https://mvnrepository.com/artifact/org.projectlombok/lombok
+- Spring-boot-starter-webmvc: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webmvc
 
 To run the front-end:
 1. Run the React app: Open a new terminal and type: npm install
@@ -38,6 +42,30 @@ This means: “please allow request from this particular URL”, so the Spring B
 is able to accept requests from our React application coming from port 3000,
 and React can get the data from the server at port 8000.
 You can reach out the requests at the URL: http://localhost:3000/ 
+
+## Get a specific job posting
+
+We need to add a new method for our controller to get the job with a specified identifier.
+That is, we need to create a new API endpoint that:
+- Takes an ID from the URL {postId}
+- Returns only the matching job post with id
+
+1. {postId} in the URL path defines a variable part of the URL
+2. @PathVariable("postId") extracts that variable and passes it to the method as id
+3. Spring automatically converts the string from the URL to an integer
+4. Path variables are defined with curly braces in the URL pattern: {postId}
+5. The @PathVariable annotation connects the URL variable to a method parameter
+
+## Add a specific job
+The @RequestBody annotation is crucial for receiving data in REST APIs:
+- It converts JSON data from the request body into a Java object.
+- Spring automatically maps JSON fields to matching properties in JobPost class.
+- No need to manually parse JSON - Spring does it automatically.
+- Data comes in as the exact object type we need. 
+- @PostMapping("/jobPost") creates an endpoint that accepts POST requests
+- @RequestBody JobPost jobPost converts the incoming JSON to a JobPost object 
+
+
 
 
 
