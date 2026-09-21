@@ -1,9 +1,123 @@
-@This web application allows companies to post new job listings, as well as update, delete or 
-see all job postings.
+# Job Portal – Full-Stack CRUD App (Spring Boot + React)
 
-The front end is built with React.js, while the backend is developed with Spring Boot.
-The communication method is RESTful API.
+A small job board where companies can **publish, browse, edit and delete job postings**.
+The backend is a REST API built with **Spring Boot**; the frontend is a **React** single-page app.
+The whole app is packaged in **one Docker image** and deployed on **Render**.
 
+**Live demo:** https://<your-app>.onrender.com
+> Free hosting: the first request after ~15 min of inactivity can take up to a minute while the server wakes up.
+
+![Job Portal screenshot](docs/screenshot.png)
+
+---
+
+## Features
+
+- View all job postings as cards (profile, description, experience, tech stack)
+- Create a new posting — the ID is **assigned automatically** by the backend
+- Edit an existing posting (fields and skills are pre-filled)
+- Delete a posting
+- Choose the required skills with checkboxes
+
+## Tech stack
+
+| Layer    | Technology |
+|----------|------------|
+| Backend  | Java 21, Spring Boot (Web MVC), Lombok, Jackson (JSON + XML) |
+| Frontend | React 18, React Router, Axios, Material UI |
+| DevOps   | Docker (multi-stage build), Render, GitHub |
+
+## Architecture
+
+```
+Browser -> React SPA (HTTP / JSON) -> Spring Boot REST API -> JobRepo (in-memory list)
+```
+
+In production, the React build is served by Spring Boot itself, so frontend and API share the same URL.
+
+> **Note:** data is stored in an in-memory `ArrayList` (no database yet), so it resets to the
+> 5 sample jobs whenever the server restarts.
+
+## REST API 
+
+Endpoint can be tested with Postman.
+
+| Method | Endpoint          | Description                         | Body       |
+|--------|-------------------|-------------------------------------|------------|
+| GET    | `/jobPosts`       | Get all job postings                | –          |
+| GET    | `/jobPost/{id}`   | Get one job posting by ID           | –          |
+| POST   | `/jobPost`        | Create a job posting (ID generated) | `JobPost`  |
+| PUT    | `/jobPost`        | Update an existing job posting      | `JobPost`  |
+| DELETE | `/jobPost/{id}`   | Delete a job posting                | –          |
+
+Example `JobPost`:
+
+```json
+{
+  "postId": 1,
+  "postProfile": "Java Developer",
+  "postDesc": "Must have good experience in core Java and advanced Java",
+  "reqExperience": 2,
+  "postTechStack": ["Core Java", "J2EE", "Spring Boot", "Hibernate"]
+}
+```
+
+## Run locally
+
+**Requirements:** Java 21, Node.js 20+ (or just Docker).
+
+### Option A – Docker (same as production)
+
+```bash
+docker build -t jobapp .
+docker run -p 8080:8080 jobapp
+```
+
+Open http://localhost:8080
+
+### Option B – Backend and frontend separately (for development)
+
+```bash
+# 1. Backend (from the project root)
+./mvnw spring-boot:run          # Windows: mvnw.cmd spring-boot:run
+# API available at http://localhost:8080/jobPosts
+
+# 2. Frontend (in a second terminal)
+cd CRUD-UI
+npm install
+npm start
+# App available at http://localhost:3000 (API calls are proxied to port 8080)
+```
+
+## Deployment
+
+1. The `Dockerfile` builds the React app, copies it into Spring Boot's `static` folder,
+   builds the Spring Boot `.war`, and runs it with Java 21.
+2. Render builds the Docker image from this GitHub repo and redeploys on every push to `main`.
+3. The server port is read from Render's `PORT` variable (`server.port=${PORT:8080}`).
+
+## What I learned
+
+- **`@RestController` vs `@Controller`** – `@RestController` returns data (JSON/XML) instead of a view name,
+  so there is no need for `@ResponseBody` on every method.
+- **`@PathVariable`** – reads a value from the URL, e.g. `/jobPost/{postId}` → `int id`.
+- **`@RequestBody`** – converts the JSON in the request body into a `JobPost` object automatically.
+- **HTTP verbs for CRUD** – `GET` read, `POST` create, `PUT` update, `DELETE` remove.
+- **CORS** – during development React (port 3000) and Spring (port 8080) are different origins, so the browser
+  blocks requests unless the backend allows them with `@CrossOrigin`. In production they share one origin.
+- **Content negotiation** – with `jackson-dataformat-xml` an endpoint like `GET /jobPost/{id}` can also return XML
+  when the client sends `Accept: application/xml`. `GET /jobPosts` returns only JSON because of
+  `produces = "application/json"`.
+- **Docker multi-stage builds** and deploying a full-stack app on Render.
+
+## Possible improvements
+
+- Replace the in-memory list with a database (PostgreSQL + Spring Data JPA)
+- Input validation and error handling (e.g. `404` when a job does not exist)
+- Unit and integration tests
+- Search and filter job postings
+
+# More details on the implementation
 The dependencies for the backend needed are:
 - Lombok: https://mvnrepository.com/artifact/org.projectlombok/lombok
 - Spring-boot-starter-webmvc: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webmvc
@@ -85,7 +199,7 @@ With delete, we proceed this way:
 - The server removes that job from the list
 - A confirmation message is returned
 
-## Convert POJO to XML data file
+
 
 
 

@@ -20,7 +20,7 @@ const Edit = () => {
 
   useEffect(() => {
     const fetchInitialPosts = async (id) => {  
-      const response = await axios.get(`http://localhost:8080/jobPost/${id}`);
+      const response = await axios.get(`/jobPost/${id}`);
       console.log(response.data);
       setForm(response.data);
     };
@@ -30,7 +30,7 @@ const Edit = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios     
-      .put("http://localhost:8080/jobPost",form)
+      .put("/jobPost",form)
       .then((resp) => {
         console.log(resp.data);
         navigate("/");
