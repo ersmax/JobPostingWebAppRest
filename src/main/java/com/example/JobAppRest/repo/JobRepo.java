@@ -12,7 +12,8 @@ import java.util.Optional;
 
 /**
  * This class should handle the saving and fetching from a DB.
- * For practical reasons, an Array List is used instead.
+ * For practical reasons, an Array List was used initially.
+ * Now, it uses JPA.
  */
 @Repository
 public interface JobRepo extends JpaRepository<JobPost, Integer> {

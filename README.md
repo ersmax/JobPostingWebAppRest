@@ -11,6 +11,12 @@ The whole app is packaged in **one Docker image** and deployed on **Render**.
 
 ---
 
+
+## Setting up JPA:
+A configuration has been done to implement JPA with PostgreSQL in the Job Management Application,
+which includes the project dependencies, repository, service,
+and REST API endpoints to handle CRUD operations for job postings.
+
 ## Features
 
 - View all job postings as cards (profile, description, experience, tech stack)
