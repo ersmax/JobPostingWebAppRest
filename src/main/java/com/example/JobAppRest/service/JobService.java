@@ -2,6 +2,7 @@ package com.example.JobAppRest.service;
 
 import com.example.JobAppRest.model.JobPost;
 import com.example.JobAppRest.repo.JobRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,19 @@ public class JobService {
                         List.of("iOS Development", "Android Development", "Mobile App"))
         ));
         repo.saveAll(jobs);
+    }
+
+    /**
+     * Hibernate keeps deleted entities in memory until it flushes.
+     * Without flushing, load() would try to save predefined jobs above (IDs 1-5)
+     * while Hibernate has those IDs marked as "deleted": error.
+     * @Transactional makes several database operations run as one unit:
+     * either all of them succeed, or none of them do. That unit is called a transaction.
+     */
+    @Transactional
+    public void resetDemoData() {
+        repo.deleteAll();
+        repo.flush();
+        load();
     }
 }
