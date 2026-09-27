@@ -60,6 +60,7 @@ public void reset() {
 - Create a new posting — the ID is **assigned automatically** by the backend
 - Edit an existing posting (fields and skills are pre-filled)
 - Delete a posting
+- Search postings by text in the profile or description
 - Choose the required skills with checkboxes
 
 ## Tech stack
@@ -93,6 +94,7 @@ Endpoint can be tested with Postman.
 | POST   | `/jobPost`        | Create a job posting (ID generated) | `JobPost`  |
 | PUT    | `/jobPost`        | Update an existing job posting      | `JobPost`  |
 | DELETE | `/jobPost/{id}`   | Delete a job posting                | –          |
+| GET    | `/jobPosts/keyword/{key}` | Search postings whose profile or description contains `key` | – |
 | GET    | `/load`           | Insert/restore the 5 sample jobs    | –          |
 
 Example `JobPost`:
@@ -299,13 +301,26 @@ With delete, we proceed this way:
 - The server removes that job from the database
 - A confirmation message is returned
 
+## Find text (search bar)
 
+**Backend.** `JobRepo` declares a *derived query*: Spring Data JPA reads the method name and writes the SQL itself.
 
+```java
+List<JobPost> findByPostProfileContainingOrPostDescContaining(String postProfile, String postDesc);
+```
 
+- `Containing` becomes `LIKE '%text%'` and `Or` joins the two conditions, so a job matches if the text
+  appears in its profile **or** in its description. The search is case-sensitive.
+- `JobService.search(keyword)` passes the same keyword for both parameters.
+- The controller exposes it at `GET /jobPosts/keyword/{key}`.
 
+**Frontend.** In `AllPosts.jsx` the search field updates `query` on every keystroke, and a `useEffect` reacts to it:
 
+- empty field : `GET /jobPosts` (all jobs);
+- more than 2 characters : `GET /jobPosts/keyword/{query}`;
+- 1–2 characters : no request, the current list stays.
 
-
-
-
-
+**Fix for the live demo.** The requests in `AllPosts.jsx` first used the full address `http://localhost:8080/...`.
+They now use relative paths (`/jobPosts`, `/jobPosts/keyword/...`, `/jobPost/{id}`), like `Create.jsx` and `Edit.jsx`:
+- in production, React is served by Spring Boot, so the request goes to the same server;
+- in development, the `"proxy": "http://localhost:8080"` entry in `package.json` forwards it to Spring.
