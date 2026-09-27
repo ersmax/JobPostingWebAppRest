@@ -12,6 +12,15 @@ The whole app is packaged in **one Docker image** and deployed on **Render**, to
 
 ---
 
+## Features
+
+- View all job postings (profile, description, experience, tech stack)
+- Create a new posting — the ID is **assigned automatically** by the backend
+- Edit an existing posting (fields and skills are pre-filled)
+- Delete a posting
+- Search postings by text in the profile or description
+- Choose the required skills with checkboxes
+
 
 ## From an in-memory list to JPA + PostgreSQL
 
@@ -53,15 +62,6 @@ public void reset() {
   the re-insert succeed or fail together and visitors never see an empty list.
 - `flush()` sends the `DELETE`s to the database before re-inserting the same IDs (1-5); otherwise Hibernate still
   has those IDs marked as "deleted" in memory and throws an error.
-
-## Features
-
-- View all job postings (profile, description, experience, tech stack)
-- Create a new posting — the ID is **assigned automatically** by the backend
-- Edit an existing posting (fields and skills are pre-filled)
-- Delete a posting
-- Search postings by text in the profile or description
-- Choose the required skills with checkboxes
 
 ## Tech stack
 
