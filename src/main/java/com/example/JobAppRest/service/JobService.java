@@ -36,6 +36,10 @@ public class JobService {
         return repo.findById(postId).orElse(new JobPost());
     }
 
+    public List<JobPost> search(String keyword) {
+        return repo.findByPostProfileContainingOrPostDescContaining(keyword, keyword);
+    }
+
     public void updateJob(JobPost jobPost) {
         repo.save(jobPost);
     }
@@ -61,9 +65,9 @@ public class JobService {
     }
 
     /**
-     * Hibernate keeps deleted entities in memory until it flushes.
-     * Without flushing, load() would try to save predefined jobs above (IDs 1-5)
-     * while Hibernate has those IDs marked as "deleted": error.
+     * flush() executes the pending DELETEs of jobs immediately,
+     * so that load() can insert jobs with those same IDs without Hibernate
+     * throwing an error for saving entities it still has marked as deleted.
      * @Transactional makes several database operations run as one unit:
      * either all of them succeed, or none of them do. That unit is called a transaction.
      */
@@ -73,4 +77,5 @@ public class JobService {
         repo.flush();
         load();
     }
+
 }
